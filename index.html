@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CNSH Q-알리미</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f0f0f0;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background: #ffffff;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #0056b3;
+            width: 100%;
+            position: relative;
+        }
+
+        .header-button {
+            background: #007BFF;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: background 0.3s;
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .header-button:hover {
+            background: #0056b3;
+        }
+
+        h1 {
+            font-weight: 700;
+            color: #0056b3;
+            margin: 10px 0;
+        }
+
+        p {
+            font-weight: 400;
+            color: #333333;
+        }
+
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin: 20px;
+            flex-grow: 1;
+        }
+
+        table {
+            width: 60%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            padding: 15px;
+            text-align: center;
+        }
+
+        th {
+            background: #0056b3;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>충남과학고등학교 3학년 Q-알리미</h1>
+        <p>학생들을 위한 학교 일정 및 정보 통합 시스템</p>
+        <button class="header-button" onclick="location.href='https://qpi-labels.github.io/main/'">QPI 메인으로 이동</button>
+    </header>
+    <main>
+        <h2>임박한 중요 이벤트</h2>
+        <table>
+            <tr>
+                <th>#</th>
+                <th>이벤트</th>
+                <th>남은 시간</th>
+            </tr>
+        </table>
+    </main>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const events = [
+                { name: "테스트", date: "2025-02-24T23:30:00" },
+                { name: "기말고사", date: "2025-07-01T08:40:00" },
+                { name: "크리스마스", date: "2025-12-25T00:00:00" },
+                { name: "2026", date: "2026-01-01T00:00:00" }
+            ];
+
+            const table = document.querySelector("table");
+
+            function formatTimeDiff(diff) {
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+            }
+
+            function updateCountdown() {
+                table.innerHTML = `
+                    <tr>
+                        <th>#</th>
+                        <th>이벤트</th>
+                        <th>남은 시간</th>
+                    </tr>
+                `;
+                
+                const now = new Date();
+                events.forEach((event, index) => {
+                    const eventDate = new Date(event.date);
+                    const diffTime = eventDate - now;
+                    const countdown = diffTime > 0 ? formatTimeDiff(diffTime) : "종료됨";
+                    
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${event.name} (${eventDate.toLocaleString()})</td>
+                        <td>${countdown}</td>
+                    `;
+                    table.appendChild(row);
+                });
+            }
+            
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        });
+    </script>
+</body>
+</html>
